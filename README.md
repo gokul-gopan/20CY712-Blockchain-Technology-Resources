@@ -1,2 +1,5 @@
-# 20CY712-Blockchain-Technology-Resources
-Work did as part of blockchain elective course
+# 20CY712-Blockchain-Technology Resources
+
+Work I did as part of the blockchain elective course.
+
+
