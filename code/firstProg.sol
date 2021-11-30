@@ -3,8 +3,9 @@
 pragma solidity >=0.7.0 <0.9.0;
 
  /*
- * Simple program to ask for student details and marks. 
- * Total and average of marks is calculated and displayed with student details.
+ @author gokul
+ @title simple class room program
+ * @dev Simple program to ask for student details and marks. 
  */
 
 contract Storage {
