@@ -1,0 +1,283 @@
+<!-- 
+Author       : Ramaguru Radhakrishnan
+Date Created : June - 2020
+Date Updated : 22.02.2021
+-->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Automotive SCM</title>
+    <meta charset="UTF-8"/>
+	<style>
+	body{        
+        padding-top: 50px;
+        padding-bottom: 30px;
+    }
+	.container{
+        width: 80%;
+        margin: 0 auto; 
+    }
+	.fixed-header, .fixed-footer{
+        width: 100%;
+        position: fixed;        
+        background: #868bf7;
+        padding: 10px 0;
+        color:#160075;
+    }
+	.fixed-header{
+        top: 0;
+    }
+    .fixed-footer{
+        bottom: 0;
+    } 
+	.container p{
+		padding-top: 90px;
+        line-height: 20px;
+    }
+	
+	</style>
+</head>
+<body>
+	<div class="fixed-header">
+		<div class="container">
+		<center>
+			<h2> Show result </h2>
+		</center>
+		</div>
+	</div>
+        
+	<div class="container">	
+	<p>
+		<b><u> Application for Automotive Supply Chain Management</u></b><br/><br/>
+		<form>
+			<table>
+
+			 <tr><td> VIN : </td> <td> <input type="text" id="vin" name="vin"> </td></tr>
+			 
+			<tr><td><input type="button" onclick="getvehicle()" value="Get Details"></td></tr>
+			</table>
+			
+			<h4> Brand: <div id="brand"></div</h4>
+			
+		</form>
+		<br/><br/>
+	</p>	
+	</div>
+
+    <script src	="https://cdn.jsdelivr.net/npm/web3/dist/web3.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha3/0.8.0/sha3.js"></script>
+    <script>	
+	
+	var account;
+	window.addEventListener('load', async () => {
+
+	
+		if (typeof window.ethereum !== 'undefined') { 
+			console.log("MetaMask is Available :) !"); 
+			}
+			
+		// Modern DApp browsers
+		if (window.ethereum) {
+			
+			window.web3 = new Web3(ethereum);
+			
+			// To prevent the page reloading when the MetaMask network changes
+			ethereum.autoRefreshOnNetworkChange = false;
+			
+			// To Capture the account details from MetaMask
+			const accounts = await ethereum.enable();
+			account = accounts[0];
+			
+			}
+			// Legacy DApp browsers
+			else if (window.web3) {
+				
+				//window.web3 = new Web3(web3.currentProvider);
+				window.web3 = new Web3(new Web3.providers.HttpProvider("https://ropsten.infura.io/v3/cbd9dc11b30147e9a2cc974be655ef7c")); 
+				}
+			// Non-DApp browsers
+			else {
+				console.log('Non-Ethereum browser detected. Please install MetaMask');
+				}
+			
+			});
+			
+			// Smart Contract ABI - Application Binary Interfaces
+			var abi =[
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_VIN",
+				"type": "string"
+			}
+		],
+		"name": "getCarDetail",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "_brand",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_dom",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_geoLoc",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_partID",
+				"type": "string"
+			},
+			{
+				"internalType": "enum TRANSMISSION",
+				"name": "_transmission",
+				"type": "uint8"
+			},
+			{
+				"internalType": "enum ASSEMBLYTYPE",
+				"name": "_assemblyType",
+				"type": "uint8"
+			},
+			{
+				"internalType": "enum FUELMODE",
+				"name": "_fuelMode",
+				"type": "uint8"
+			},
+			{
+				"internalType": "enum AUTONOMY",
+				"name": "_autonomy",
+				"type": "uint8"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_VIN",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_brand",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_dom",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_geoLoc",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_partID",
+				"type": "string"
+			},
+			{
+				"internalType": "enum TRANSMISSION",
+				"name": "_transmission",
+				"type": "uint8"
+			},
+			{
+				"internalType": "enum ASSEMBLYTYPE",
+				"name": "_assemblyType",
+				"type": "uint8"
+			},
+			{
+				"internalType": "enum FUELMODE",
+				"name": "_fuelMode",
+				"type": "uint8"
+			},
+			{
+				"internalType": "enum AUTONOMY",
+				"name": "_autonomy",
+				"type": "uint8"
+			}
+		],
+		"name": "storeCarDetail",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	}
+]
+			
+			//Smart Contract Address
+			var contractaddress = '0xBE509E20f8feCbF520642FC5B791D76C9fD3D591';
+
+				function addvehicle(){
+					
+				console.log("Sending inputs to SC");
+				
+				var VIN = document.getElementById('vin').value;
+				var brand = document.getElementById('brand').value;
+				var dom = document.getElementById('dom').value;
+				var geoLoc = document.getElementById('geoLoc').value;
+				var partID = document.getElementById('partID').value;
+				var transmission = document.getElementById('transmisson').value;
+				var assemblyType = document.getElementById('assemblyType').value;
+				var fuelMode =document.getElementById('fuelMode').value;
+				var autonomy = document.getElementById('autonomy').value;;
+
+				//Instantiate and connect to contract address via ABI
+				var myContract = new web3.eth.Contract(abi,contractaddress, {from: account, gasPrice: '2000000000', gas: '8000000'});
+								
+			
+				
+				//var result = myContract.methods.storeDateofBirth(name, hash1, hash2, hash3, hash4, hash5).send(function (err, result) {
+				var result = myContract.methods.storeCarDetail(VIN, brand, dom, geoLoc, partID, transmission, assemblyType, fuelMode, autonomy).send(function (err, result) {
+				
+				if (err) { console.log(err); }
+				if (result) { document.getElementById("result").innerHTML = result; }
+				
+				});
+					
+			}
+			
+			// Function to call the "get vehicle" in Deployed Smart Contract
+			function getvehicle() {
+					
+				console.log("Getting car details from SC");
+					
+				//Instantiate and connect to contract address via ABI
+				var myContract = new web3.eth.Contract(abi,contractaddress, {from: account, gasPrice: '20000000000', gas: '80000000'});
+		
+				var VIN = document.getElementById("vin").value;
+		
+				//call the "view certificate" function
+				var result = myContract.methods.getCarDetail(VIN).call(function (err, result) {
+				
+				if (err) { console.log(err); }
+			        if (result) { document.getElementById("brand").innerHTML = result[0];
+                    }
+				//	document.getElementById("dom").innerHTML = result[1];
+				console.log(result);
+				
+				});
+				
+			}
+						
+    </script>
+	
+	<div class="fixed-footer">
+		<div> <p><a href="result.html">More about the html</a> </p></div>
+		<div class="container">
+			
+			<center> <h5> Copyright &copy; 2021-2022 <br/> Gokul G, Ramaguru R, Amrita Vishwa Vidyapeetham, Coimbatore, Tamil Nadu, India </h5> </center>
+		</div>
+	</div>
+
+</body>
+</html>
