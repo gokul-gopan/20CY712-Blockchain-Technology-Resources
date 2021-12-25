@@ -59,6 +59,14 @@ Date Updated : 22.02.2021
 			</table>
 			
 			<h4> Brand: <div id="brand"></div</h4>
+			<h4> Date of Manufacture: <div id="dom"></div</h4>
+			<h4> Geolocation: <div id="geoLoc"></div</h4>
+			<h4> Part ID: <div id="partID"></div</h4>
+			<h4> Tranmission: <div id="transmission"></div</h4>
+			<h4> Assembly Type: <div id="assemblyType"></div</h4>
+			<h4> Fuel Mode: <div id="fuelMode"></div</h4>
+			<h4> Autonomy: <div id="autonomy"></div</h4>
+			
 			
 		</form>
 		<br/><br/>
@@ -260,7 +268,16 @@ Date Updated : 22.02.2021
 				var result = myContract.methods.getCarDetail(VIN).call(function (err, result) {
 				
 				if (err) { console.log(err); }
-			        if (result) { document.getElementById("brand").innerHTML = result[0];
+			        if (result) { 
+						document.getElementById("brand").innerHTML = result[0];
+						document.getElementById("dom").innerHTML = result[1];
+						document.getElementById("geoLoc").innerHTML = result[2];
+						document.getElementById("partID").innerHTML = result[3];
+						document.getElementById("transmission").innerHTML = result[4];
+						document.getElementById("assemblyType").innerHTML = result[5];
+						document.getElementById("fuelMode").innerHTML = result[6];
+						document.getElementById("autonomy").innerHTML = result[7];
+
                     }
 				//	document.getElementById("dom").innerHTML = result[1];
 				console.log(result);
